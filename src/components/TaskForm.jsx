@@ -1,59 +1,65 @@
 import { useState } from "react";
 
-function TaskForm({ ajouterTache }) {
-  const [titre, setTitre] = useState("");
+function TaskForm({ onAddTask }) {
+
+  const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [dateLimite, setDateLimite] = useState("");
+  const [date, setDate] = useState("");
 
-  function handleSubmit(event) {
-    event.preventDefault();
+  function handleSubmit(e) {
+    e.preventDefault();
 
-    const nouvelleTache = {
+    if (
+      title.trim() === "" ||
+      description.trim() === "" ||
+      date === ""
+    ) {
+      alert("Veuillez remplir tous les champs");
+      return;
+    }
+
+    const newTask = {
       id: Date.now(),
-      titre: titre,
+      title: title,
       description: description,
-      dateLimite: dateLimite,
-      statut: "En attente",
+      status: "En attente",
+      date: date
     };
 
-    ajouterTache(nouvelleTache);
+    onAddTask(newTask);
 
-    setTitre("");
+    setTitle("");
     setDescription("");
-    setDateLimite("");
+    setDate("");
   }
 
   return (
     <form onSubmit={handleSubmit}>
+
       <h2>Ajouter une tâche</h2>
 
-      <label htmlFor="titre">Titre :</label>
+      <label>Titre</label>
       <input
-        id="titre"
         type="text"
-        value={titre}
-        onChange={(event) => setTitre(event.target.value)}
-        required
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
       />
 
-      <label htmlFor="description">Description :</label>
+      <label>Description</label>
       <textarea
-        id="description"
         value={description}
-        onChange={(event) => setDescription(event.target.value)}
-        required
+        onChange={(e) => setDescription(e.target.value)}
       />
 
-      <label htmlFor="dateLimite">Date limite :</label>
+      <label>Date limite</label>
       <input
-        id="dateLimite"
         type="date"
-        value={dateLimite}
-        onChange={(event) => setDateLimite(event.target.value)}
-        required
+        value={date}
+        onChange={(e) => setDate(e.target.value)}
       />
 
       <button type="submit">Ajouter</button>
+
     </form>
   );
 }
